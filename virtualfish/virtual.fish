@@ -44,8 +44,12 @@ end
 function __vf_activate --description "Activate a virtualenv"
     # check arguments
     if [ (count $argv) -lt 1 ]
-        echo "You need to specify a virtualenv."
-        return 1
+        if [ -n $VIRTUALFISH_ACTIVATION_FILE ]
+            __vf_activate (cat $VIRTUALFISH_ACTIVATION_FILE)
+        else
+            echo "You need to specify a virtualenv."
+            return 1
+        end
     end
     if not [ -d $VIRTUALFISH_HOME/$argv[1] ]
         echo "The virtualenv $argv[1] does not exist."
